@@ -49,5 +49,5 @@ Se o que eu pedi não está coberto por nenhuma task, me avise em vez de impleme
 
 ## Fora de escopo
 
-- Ver `spec.md` seção 3. Em especial: não interpretar `descricao`, não tratar
+- Ver `spec.md` seção 3. Em especial: não interpretar `descricao`,
   não buscar cotação fora da tabela fornecida, não inventar regra de fim de semana.
