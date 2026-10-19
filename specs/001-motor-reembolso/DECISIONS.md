@@ -1,42 +1,22 @@
 # Log de Decisões e Mudanças de Spec
 
-> Uma entrada **toda vez** que a spec mudar. Este arquivo é a prova de que a spec
-> foi tratada como artefato vivo e não como cerimônia de abertura.
->
-> Spec que não muda em dois dias é spec que ninguém consultou. Mudança não é
-> demérito — mudança não registrada é.
-
-Ordem cronológica inversa: a mais recente primeiro.
+> Uma entrada **toda vez** que a spec mudar. Ordem cronológica inversa: a mais
+> recente primeiro.
 
 ---
 
-## D-002 — <título curto> · `<data>`
+## D-001 — Spec 1.0 fechada · 2026-10-19
 
-**Gatilho:** <o que provocou: envelope lacrado / erro descoberto na implementação /
-ambiguidade que só apareceu ao testar / o Claude apontou uma contradição>
+**Gatilho:** início do desafio. Leitura da política v3 cruzada com
+`exemplos/despesas-exemplo.json`, item por item.
 
-**O que mudou na spec:** <de → para, citando o ID da regra>
+**O que mudou na spec:** criação. 12 regras (RN-001..RN-012), 15 ambiguidades
+(AMB-001..AMB-015), 15 casos de borda, resultado esperado E-01.
 
-**Por quê:**
+**Por quê:** não existe spec anterior.
 
-**O que isso invalidou:** <requisitos, decisões técnicas, testes que caíram>
+**O que isso invalidou:** nada.
 
-**Tasks afetadas:** <as que precisaram ser refeitas + as novas criadas>
+**Tasks afetadas:** T-001..T-011 criadas a partir dela.
 
-**Custo:** <quantos arquivos tocados, quanto tempo>
-
----
-
-## D-001 — <título curto> · `<data>`
-
-**Gatilho:**
-
-**O que mudou na spec:**
-
-**Por quê:**
-
-**O que isso invalidou:**
-
-**Tasks afetadas:**
-
-**Custo:**
+**Custo:** uma sessão de leitura e escrita; nenhum código existia.
