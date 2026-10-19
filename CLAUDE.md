@@ -1,10 +1,5 @@
 # CLAUDE.md
 
-> Este arquivo é lido pelo Claude Code no início de toda sessão. É onde moram as
-> convenções que você não quer repetir em todo prompt.
-> Substitua os `<...>` e apague o que não usar. Mantenha curto — CLAUDE.md longo
-> é CLAUDE.md ignorado.
-
 ## O projeto
 
 Motor de cálculo de reembolso de despesas corporativas. CLI que lê um JSON de
@@ -31,19 +26,27 @@ Se o que eu pedi não está coberto por nenhuma task, me avise em vez de impleme
 - Todo commit referencia uma task: `feat(T-003): <descrição>`.
   Mudanças de documentação: `docs(spec):`, `docs(plan):`, `docs(tasks):`.
 - Nenhuma regra de negócio entra sem teste.
+- Ao marcar uma task como feita em `tasks.md`, preencher o hash do commit.
+- Ao fim de cada sessão, lembrar o usuário de rodar `/export` para
+  `docs/sessions/NN-descricao-curta.md` e commitar.
 
 ## Stack e comandos
 
-- Linguagem: `<...>`
-- Rodar: `<comando>`
-- Testes: `<comando>`
-- Lint/format: `<comando>`
+- Linguagem: Python 3.12, só biblioteca padrão. Nenhuma dependência.
+- Rodar: `./reembolso calcular --input exemplos/despesas-exemplo.json --output resultado.json`
+- Testes: `python3 -m unittest discover -s tests -v`
+- Lint/format: nenhum.
 
 ## Convenções de código
 
-- `<nomenclatura, estrutura de pastas, tratamento de erro, o que for relevante>`
-- Valores monetários: `<como são representados — decimal, centavos em inteiro, etc.>`
+- Código em `src/reembolso/`, um módulo por peça do `plan.md` seção 2.
+- Testes em `tests/`, nome `test_rn_NNN_<frase do aceite>` ou `test_b_NN_<frase>`.
+- Valores monetários: inteiros em centavos em todo o motor; conversão de/para
+  reais só em `entrada.py` e `saida.py`.
+- Erro de entrada: `EntradaInvalida`, capturada só na CLI (código de saída 2).
+- Sem classes além de dataclasses; sem abstração com uma implementação só.
 
 ## Fora de escopo
 
-- `<o que este projeto explicitamente não faz — evita que o agente invente feature>`
+- Ver `spec.md` seção 3. Em especial: não interpretar `descricao`, não tratar
+  moeda estrangeira, não inventar regra de fim de semana.
