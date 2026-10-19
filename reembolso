@@ -1,0 +1,3 @@
+#!/bin/sh
+# Atalho: ./reembolso calcular --input despesas.json --output resultado.json
+PYTHONPATH="$(dirname "$0")/src" exec python3 -m reembolso "$@"
