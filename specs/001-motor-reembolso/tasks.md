@@ -77,13 +77,13 @@
 
 ## Fase 3 — Saída e CLI
 
-- [ ] **T-010** — Serialização da saída (reais com 2 casas, `detalhe`
+- [x] **T-010** — Serialização da saída (reais com 2 casas, `detalhe`
   legível) e CLI `calcular --input --output`; erro de entrada sai com código 2
   e sem arquivo.
   - **Atende:** spec 4.2, 4.1 (erro), DT-004
   - **Aceite:** `test_cli_escreve_saida_no_schema`,
     `test_cli_entrada_invalida_nao_escreve_saida`
-  - **Commit:**
+  - **Commit:** `abaa8f4`
 
 - [ ] **T-011** — Ponta a ponta com `exemplos/despesas-exemplo.json` igual à
   tabela E-01; README do projeto; CLAUDE.md com comandos reais.
