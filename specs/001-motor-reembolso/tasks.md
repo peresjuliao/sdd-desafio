@@ -104,14 +104,14 @@
     `test_rn_013_representacao_so_onde_listada`
   - **Commit:** `f24a4ae`
 
-- [ ] **T-013** — Campo `moeda` e conversão pela taxa da data (ou a anterior
+- [x] **T-013** — Campo `moeda` e conversão pela taxa da data (ou a anterior
   mais recente); `cambio_indisponivel`; piso de nota e cotas sobre o valor em
   reais; duplicata sobre moeda e valor original.
   - **Atende:** RN-014, RN-010 (moeda), RN-003/RN-007 (ajustes), AMB-019..AMB-023, AMB-026, B-19..B-23
   - **Aceite:** `test_rn_014_converte_pela_taxa_da_data`, `test_rn_014_sem_taxa_na_data_usa_anterior_mais_recente`,
     `test_rn_014_moeda_sem_taxa_e_cambio_indisponivel`, `test_b_20_data_anterior_a_primeira_taxa`,
     `test_amb_022_piso_de_nota_sobre_valor_em_reais`, `test_b_23_moedas_diferentes_nao_sao_duplicata`
-  - **Commit:**
+  - **Commit:** `f691717`
 
 - [ ] **T-014** — Pendência: reembolsável > 500,00 vira `pendente`; resumo
   com `total_pendente` e `pendentes`.
