@@ -58,13 +58,13 @@
     `test_rn_003_cem_e_um_centavo_sem_nota_recusado`
   - **Commit:** `8d34d60`
 
-- [ ] **T-008** — Cota diária por (data, categoria) consumida em ordem; corte
+- [x] **T-008** — Cota diária por (data, categoria) consumida em ordem; corte
   do excedente; status aprovado/parcial/recusado.
   - **Atende:** RN-001, RN-002, AMB-001, AMB-002, AMB-003, AMB-015, B-01, B-02, B-05
   - **Aceite:** `test_rn_001_dois_almocos_somam_na_cota_do_dia`,
     `test_rn_002_excedente_e_cortado_e_segundo_item_zera`,
     `test_b_05_item_sem_nota_nao_consome_cota`, `test_rn_011_hospedagem_e_uma_diaria`
-  - **Commit:**
+  - **Commit:** `9be2dc2`
 
 - [ ] **T-009** — Dias em viagem por hospedagem (D e D+1) e ampliação de 50%
   das cotas; piso de nota inalterado.
