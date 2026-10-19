@@ -32,11 +32,11 @@
     `test_rn_010_categoria_maiuscula_e_normalizada`
   - **Commit:** `5a7a27e`
 
-- [ ] **T-004** — Valor zero ou negativo recusado como inválido.
+- [x] **T-004** — Valor zero ou negativo recusado como inválido.
   - **Atende:** RN-009, AMB-008, B-08
   - **Aceite:** `test_rn_009_estorno_negativo_recusado_e_nao_abate`,
     `test_b_08_valor_zero_invalido`
-  - **Commit:**
+  - **Commit:** `27d6315`
 
 - [ ] **T-005** — Competência fechada e inclusiva.
   - **Atende:** RN-006, AMB-006, B-06, B-07
