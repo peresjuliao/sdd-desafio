@@ -34,6 +34,7 @@ Se o que eu pedi não está coberto por nenhuma task, me avise em vez de impleme
 
 - Linguagem: Python 3.12, só biblioteca padrão. Nenhuma dependência.
 - Rodar: `./reembolso calcular --input exemplos/despesas-exemplo.json --output resultado.json`
+  (opcionais: `--politica exemplos/envelope/politica-v4.json --cambio exemplos/envelope/cambio.json`)
 - Testes: `python3 -m unittest discover -s tests -v`
 - Lint/format: nenhum.
 
@@ -42,11 +43,11 @@ Se o que eu pedi não está coberto por nenhuma task, me avise em vez de impleme
 - Código em `src/reembolso/`, um módulo por peça do `plan.md` seção 2.
 - Testes em `tests/`, nome `test_rn_NNN_<frase do aceite>` ou `test_b_NN_<frase>`.
 - Valores monetários: inteiros em centavos em todo o motor; conversão de/para
-  reais só em `entrada.py` e `saida.py`.
+  reais só em `entrada.py` e `saida.py`; câmbio com `Decimal` em `cambio.py`.
 - Erro de entrada: `EntradaInvalida`, capturada só na CLI (código de saída 2).
 - Sem classes além de dataclasses; sem abstração com uma implementação só.
 
 ## Fora de escopo
 
 - Ver `spec.md` seção 3. Em especial: não interpretar `descricao`, não tratar
-  moeda estrangeira, não inventar regra de fim de semana.
+  não buscar cotação fora da tabela fornecida, não inventar regra de fim de semana.

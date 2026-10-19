@@ -2,9 +2,10 @@
 import argparse
 import sys
 
+from .cambio import SEM_CAMBIO, carregar_cambio
 from .entrada import EntradaInvalida, ler_pedido
 from .motor import calcular
-from .politica import POLITICA_V3
+from .politica import POLITICA_PADRAO, carregar_politica
 from .saida import escrever
 
 
@@ -14,9 +15,13 @@ def main(argv=None) -> int:
     calc = sub.add_parser("calcular", help="calcula o reembolso de um arquivo de despesas")
     calc.add_argument("--input", required=True)
     calc.add_argument("--output", required=True)
+    calc.add_argument("--politica", help="tabela de limites (ex.: exemplos/envelope/politica-v4.json); sem ela vale a padrão")
+    calc.add_argument("--cambio", help="taxas de câmbio (ex.: exemplos/envelope/cambio.json); sem ela só BRL é aceito")
     args = parser.parse_args(argv)
     try:
-        resultado = calcular(ler_pedido(args.input), POLITICA_V3)
+        politica = carregar_politica(args.politica) if args.politica else POLITICA_PADRAO
+        cambio = carregar_cambio(args.cambio) if args.cambio else SEM_CAMBIO
+        resultado = calcular(ler_pedido(args.input), politica, cambio)
     except EntradaInvalida as e:
         print(f"erro na entrada: {e}", file=sys.stderr)
         return 2
