@@ -120,12 +120,12 @@
     `test_rn_012_pendente_fora_do_total_reembolsavel`
   - **Commit:** `d898d9a`
 
-- [ ] **T-015** — CLI com `--politica` e `--cambio` opcionais; campos novos na
+- [x] **T-015** — CLI com `--politica` e `--cambio` opcionais; campos novos na
   saída; ponta a ponta E-02 e E-03; E-01 inalterado; README e CLAUDE.md.
   - **Atende:** spec 4.1/4.2 [v4], 9 (critérios [v4]), E-02, E-03
   - **Aceite:** `test_e_02_envelope_comercial_bate_com_a_spec`, `test_e_03_envelope_cc_desconhecido_bate_com_a_spec`,
     `test_e_01_exemplo_oficial_bate_com_a_spec` (continua passando)
-  - **Commit:**
+  - **Commit:** `6b2b97a`
 
 ---
 
