@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 
 from .entrada import Despesa, Pedido
+from .politica import limites_para
 
 
 @dataclass(frozen=True)
@@ -44,6 +45,7 @@ def calcular(pedido: Pedido, politica: dict) -> Resultado:
         "vistos": set(),   # chaves de duplicata já avaliadas (RN-007)
         "saldo": {},       # (data, categoria) -> centavos que restam da cota (RN-001)
         "viagem": _dias_em_viagem(pedido),
+        "limites": limites_para(politica, pedido.colaborador.get("centro_custo")),  # RN-013
     }
     avaliacoes = [_avaliar(d, pedido, politica, estado) for d in pedido.despesas]
     return Resultado(politica["versao"], pedido, avaliacoes)
@@ -71,8 +73,9 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avalia
     if not (pedido.inicio <= d.data <= pedido.fim):                          # RN-006
         return _recusa(d, "fora_da_competencia",
                        f"data {d.data} fora do periodo {pedido.inicio} a {pedido.fim}")
-    if d.categoria not in politica["limites"]:                               # RN-008
-        return _recusa(d, "categoria_nao_coberta", f"categoria '{d.categoria}' nao esta na politica")
+    if estado["limites"].get(d.categoria, 0) <= 0:                           # RN-008, RN-013
+        return _recusa(d, "categoria_nao_coberta",
+                       f"categoria '{d.categoria}' nao e reembolsavel para {pedido.colaborador.get('centro_custo') or 'a politica padrao'}")
     chave = _chave_duplicata(d)                                              # RN-007
     if chave in estado["vistos"]:
         return _recusa(d, "duplicata",
@@ -94,7 +97,7 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avalia
 
 
 def _limite(d: Despesa, politica: dict, estado: dict) -> int:
-    base = politica["limites"][d.categoria]
+    base = estado["limites"][d.categoria]
     if d.data in estado["viagem"]:                                           # RN-004
         return base * (100 + politica["acrescimo_em_viagem_percentual"]) // 100
     return base
