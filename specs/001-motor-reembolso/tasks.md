@@ -85,11 +85,11 @@
     `test_cli_entrada_invalida_nao_escreve_saida`
   - **Commit:** `abaa8f4`
 
-- [ ] **T-011** — Ponta a ponta com `exemplos/despesas-exemplo.json` igual à
+- [x] **T-011** — Ponta a ponta com `exemplos/despesas-exemplo.json` igual à
   tabela E-01; README do projeto; CLAUDE.md com comandos reais.
   - **Atende:** spec 9 (critérios de aceite), E-01
   - **Aceite:** `test_e_01_exemplo_oficial_bate_com_a_spec`
-  - **Commit:**
+  - **Commit:** `fed47e3`
 
 ---
 
