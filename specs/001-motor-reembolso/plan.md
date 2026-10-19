@@ -1,6 +1,6 @@
 # Plano Técnico — Motor de Cálculo de Reembolso
 
-**Versão:** 1.0 · **Baseado na spec:** 1.0
+**Versão:** 2.0 · **Baseado na spec:** 2.0
 
 > Aqui mora o COMO. Nenhuma regra de negócio nova: se apareceu uma, ela
 > pertence à `spec.md`.
@@ -27,7 +27,11 @@ Peças (um módulo cada, dentro de `src/reembolso/`):
 - `entrada.py` — lê o JSON, valida obrigatórios, converte `valor` para centavos
   e `data` para `date`. Única peça que conhece o formato de entrada.
 - `politica.py` — a tabela de limites (RN-001), o piso de nota (RN-003) e o
-  percentual de viagem (RN-004), como dados, não como `if`s espalhados.
+  percentual de viagem (RN-004), como dados, não como `if`s espalhados. Na 2.0
+  também carrega o arquivo de política e resolve a tabela por centro de custo
+  (RN-013).
+- `cambio.py` — carrega a tabela de câmbio e resolve a taxa da data ou a
+  anterior mais recente (RN-014). Só na 2.0.
 - `motor.py` — função pura `calcular(pedido, politica) -> resultado`. Sem I/O.
   Implementa a ordem da seção 8 da spec.
 - `saida.py` — transforma o resultado em dicionários com valores em reais
@@ -67,10 +71,15 @@ POLITICA_V3 = {
 }
 ```
 
-O motor recebe a política como argumento. Hoje há uma só, constante no código.
-Se a política passar a vir de fora, troca-se a origem do dicionário sem tocar
-o motor. Não vou além disso: carregar arquivo de política sem requisito é
-arquitetura genérica no lugar errado.
+O motor recebe a política como argumento. Na 1.0 havia uma só, constante no
+código; a aposta era que, se a política passasse a vir de fora, bastaria
+trocar a origem do dicionário.
+
+**Na 2.0** (envelope) a aposta pagou em parte: `carregar_politica` lê o JSON
+do financeiro e produz o mesmo dicionário, com uma chave a mais
+(`centros_custo`). O que o motor precisou mudar foi a resolução da tabela por
+colaborador (`limites_para`, uma linha de merge) e o critério de "categoria
+coberta" (limite > 0 em vez de "chave existe"). Ver DT-005.
 
 ## 5. Decisões técnicas
 
@@ -114,6 +123,23 @@ depois do cálculo terminar.
 **Alternativa descartada:** validar e escrever saída parcial com erros dentro —
 mistura dois contratos.
 
+### DT-005 — Envelope: política de arquivo, câmbio e pendência (2.0)
+
+**Contexto:** spec 2.0 (D-003).
+**Decisão:** (a) `carregar_politica` converte o arquivo para o mesmo
+dicionário que a constante já tinha; o arquivo é opcional e a constante vira
+`POLITICA_PADRAO`. (b) `cambio.py` é um módulo próprio com `Decimal`, e a
+conversão é calculada no começo de `_avaliar`, antes das regras, para que o
+valor em reais exista em todo item com taxa (D-004). (c) Pendência é um
+ajuste de `status` no fim de `_avaliar`; o limiar vive na política
+(`pendencia_acima_de`, padrão 500) embora o arquivo v4 não o traga.
+**Alternativa descartada:** converter na leitura (`entrada.py`) — deixaria
+`entrada.py` dependente do arquivo de câmbio e esconderia a taxa usada, que a
+saída precisa mostrar.
+**Consequência:** `motor.py` cresceu ~15 linhas; `entrada.py` ganhou um
+campo; `saida.py` quatro campos. Nenhum teste da 1.0 mudou de resultado;
+dois mudaram de forma (campos novos no resumo).
+
 ## 6. Estratégia de testes
 
 - **Nível:** unitários sobre `calcular` (a maioria) + um ponta a ponta pela
@@ -132,5 +158,5 @@ mistura dois contratos.
 |---|---|---|
 | Float na leitura (`json` entrega `float`) estragar centavos | alta se esquecer | `Decimal(str(x))`, nunca `Decimal(x)`; teste B-09 cobre |
 | Conjunto oculto do avaliador com campo opcional ausente | média | defaults declarados na spec 4.1; teste B-14 |
-| Mudança do Dia 2 exigir política de fora | desconhecida | política já é um dicionário injetado no motor; troca-se a origem |
-| Mudança do Dia 2 mexer na ordem das regras | desconhecida | a ordem está numa única função; atualizar spec seção 8 antes |
+| Mudança do Dia 2 exigir política de fora | aconteceu | política já era um dicionário injetado; `carregar_politica` produz o mesmo dicionário |
+| Mudança do Dia 2 mexer na ordem das regras | aconteceu (conversão e pendência) | a ordem está numa única função; spec seção 8 atualizada antes (D-003, D-004) |
