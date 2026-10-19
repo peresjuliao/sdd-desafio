@@ -26,11 +26,11 @@
 
 ## Fase 2 — Regras de negócio
 
-- [ ] **T-003** — Normalização de categoria/fornecedor e categoria não coberta.
+- [x] **T-003** — Normalização de categoria/fornecedor e categoria não coberta.
   - **Atende:** RN-008, RN-010, AMB-009, AMB-010
   - **Aceite:** `test_rn_008_categoria_fora_da_politica_recusada`,
     `test_rn_010_categoria_maiuscula_e_normalizada`
-  - **Commit:**
+  - **Commit:** `5a7a27e`
 
 - [ ] **T-004** — Valor zero ou negativo recusado como inválido.
   - **Atende:** RN-009, AMB-008, B-08
