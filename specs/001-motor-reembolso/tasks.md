@@ -93,9 +93,39 @@
 
 ---
 
-## Fase 4 — Envelope (criar no Dia 2)
+## Fase 4 — Envelope (Dia 2, spec 2.0, D-003)
 
-<Numeração continua de T-012.>
+- [ ] **T-012** — Política lida de arquivo e tabela de limites por centro de
+  custo (sobreposição categoria a categoria; limite zero = não coberta);
+  política padrão embutida quando não há arquivo.
+  - **Atende:** RN-013, RN-008 (limite zero), AMB-016, AMB-017, AMB-018, AMB-024, AMB-027, AMB-028, B-16, B-17, B-18
+  - **Aceite:** `test_rn_013_cc_sem_entrada_usa_padrao`, `test_rn_013_cc_sobrepoe_categoria_a_categoria`,
+    `test_rn_013_limite_zero_e_categoria_nao_coberta`, `test_b_18_hospedagem_limite_zero_ainda_marca_viagem`,
+    `test_rn_013_representacao_so_onde_listada`
+  - **Commit:**
+
+- [ ] **T-013** — Campo `moeda` e conversão pela taxa da data (ou a anterior
+  mais recente); `cambio_indisponivel`; piso de nota e cotas sobre o valor em
+  reais; duplicata sobre moeda e valor original.
+  - **Atende:** RN-014, RN-010 (moeda), RN-003/RN-007 (ajustes), AMB-019..AMB-023, AMB-026, B-19..B-23
+  - **Aceite:** `test_rn_014_converte_pela_taxa_da_data`, `test_rn_014_sem_taxa_na_data_usa_anterior_mais_recente`,
+    `test_rn_014_moeda_sem_taxa_e_cambio_indisponivel`, `test_b_20_data_anterior_a_primeira_taxa`,
+    `test_amb_022_piso_de_nota_sobre_valor_em_reais`, `test_b_23_moedas_diferentes_nao_sao_duplicata`
+  - **Commit:**
+
+- [ ] **T-014** — Pendência: reembolsável > 500,00 vira `pendente`; resumo
+  com `total_pendente` e `pendentes`.
+  - **Atende:** RN-015, RN-012, AMB-025, B-24, B-25
+  - **Aceite:** `test_rn_015_acima_de_500_fica_pendente`, `test_b_24_exatamente_500_aprovado`,
+    `test_rn_012_pendente_fora_do_total_reembolsavel`
+  - **Commit:**
+
+- [ ] **T-015** — CLI com `--politica` e `--cambio` opcionais; campos novos na
+  saída; ponta a ponta E-02 e E-03; E-01 inalterado; README e CLAUDE.md.
+  - **Atende:** spec 4.1/4.2 [v4], 9 (critérios [v4]), E-02, E-03
+  - **Aceite:** `test_e_02_envelope_comercial_bate_com_a_spec`, `test_e_03_envelope_cc_desconhecido_bate_com_a_spec`,
+    `test_e_01_exemplo_oficial_bate_com_a_spec` (continua passando)
+  - **Commit:**
 
 ---
 
@@ -124,4 +154,8 @@
 | AMB-009, 010 | T-003 | (via RN-008/010) |
 | AMB-011 | — | sem comportamento próprio; coberto por E-01 (`d-012` é sábado) |
 | B-01..B-15 | T-001..T-009 | `test_b_NN_*` |
+| RN-013, AMB-016..018, 024, 027, 028 | T-012 | `test_rn_013_*` |
+| RN-014, AMB-019..023, 026 | T-013 | `test_rn_014_*`, `test_amb_022_*`, `test_b_2N_*` |
+| RN-015, AMB-025 | T-014 | `test_rn_015_*`, `test_b_24_*` |
+| E-02, E-03 | T-015 | `test_e_02_*`, `test_e_03_*` |
 | E-01 | T-011 | `test_e_01_exemplo_oficial_bate_com_a_spec` |
