@@ -51,12 +51,12 @@
     `test_b_12_tres_iguais_recusa_duas`
   - **Commit:** `7fb28ee`
 
-- [ ] **T-007** — Nota fiscal obrigatória acima de 100,00 (estrito, sobre o
+- [x] **T-007** — Nota fiscal obrigatória acima de 100,00 (estrito, sobre o
   valor do item).
   - **Atende:** RN-003, AMB-004, AMB-012, B-03, B-04
   - **Aceite:** `test_rn_003_cem_reais_exatos_nao_exige_nota`,
     `test_rn_003_cem_e_um_centavo_sem_nota_recusado`
-  - **Commit:**
+  - **Commit:** `8d34d60`
 
 - [ ] **T-008** — Cota diária por (data, categoria) consumida em ordem; corte
   do excedente; status aprovado/parcial/recusado.
