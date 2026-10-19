@@ -47,6 +47,9 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict) -> Avaliacao:
     # ordem da spec seção 8: a primeira regra que recusa vence
     if d.valor <= 0:                                                         # RN-009
         return _recusa(d, "valor_invalido", f"valor {reais(d.valor)} nao e uma despesa")
+    if not (pedido.inicio <= d.data <= pedido.fim):                          # RN-006
+        return _recusa(d, "fora_da_competencia",
+                       f"data {d.data} fora do periodo {pedido.inicio} a {pedido.fim}")
     if d.categoria not in politica["limites"]:                               # RN-008
         return _recusa(d, "categoria_nao_coberta", f"categoria '{d.categoria}' nao esta na politica")
     return Avaliacao(d, d.valor, "aprovado", "dentro_do_limite", "")

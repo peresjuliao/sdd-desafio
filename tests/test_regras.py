@@ -46,5 +46,19 @@ class TestValor(unittest.TestCase):
         self.assertEqual(a.motivo, "valor_invalido")
 
 
+class TestCompetencia(unittest.TestCase):
+    def test_rn_006_fora_da_competencia_recusado(self):
+        a, = avaliar(despesa(data="2026-04-15"))
+        self.assertEqual((a.status, a.motivo), ("recusado", "fora_da_competencia"))
+
+    def test_b_06_pontas_do_periodo_aceitas(self):
+        a, b = avaliar(despesa(data="2026-07-01"), despesa(data="2026-07-31"))
+        self.assertEqual((a.status, b.status), ("aprovado", "aprovado"))
+
+    def test_b_07_dia_antes_do_inicio_recusado(self):
+        a, b = avaliar(despesa(data="2026-06-30"), despesa(data="2026-08-01"))
+        self.assertEqual((a.motivo, b.motivo), ("fora_da_competencia", "fora_da_competencia"))
+
+
 if __name__ == "__main__":
     unittest.main()
