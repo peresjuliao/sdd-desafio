@@ -62,4 +62,7 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avalia
         return _recusa(d, "duplicata",
                        f"repete item anterior de {d.data}, {d.categoria}, {d.fornecedor}, {reais(d.valor)}")
     estado["vistos"].add(chave)
+    piso = politica["nota_fiscal_obrigatoria_acima_de"]                      # RN-003
+    if d.valor > piso and not d.tem_nota_fiscal:
+        return _recusa(d, "sem_nota_fiscal", f"valor {reais(d.valor)} acima de {reais(piso)} exige nota fiscal")
     return Avaliacao(d, d.valor, "aprovado", "dentro_do_limite", "")

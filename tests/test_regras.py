@@ -81,5 +81,25 @@ class TestDuplicata(unittest.TestCase):
         self.assertEqual(b.status, "aprovado")
 
 
+class TestNotaFiscal(unittest.TestCase):
+    def test_rn_003_cem_reais_exatos_nao_exige_nota(self):
+        a, = avaliar(despesa(categoria="transporte_urbano", valor=100.00, tem_nota_fiscal=False))
+        self.assertNotEqual(a.motivo, "sem_nota_fiscal")
+
+    def test_rn_003_cem_e_um_centavo_sem_nota_recusado(self):
+        a, = avaliar(despesa(categoria="transporte_urbano", valor=100.01, tem_nota_fiscal=False))
+        self.assertEqual((a.status, a.motivo, a.reembolsavel), ("recusado", "sem_nota_fiscal", 0))
+
+    def test_rn_003_acima_de_cem_com_nota_passa(self):
+        a, = avaliar(despesa(categoria="hospedagem", valor=200, tem_nota_fiscal=True))
+        self.assertEqual(a.status, "aprovado")
+
+    def test_amb_012_piso_e_por_item_nao_por_dia(self):
+        a, b = avaliar(despesa(categoria="transporte_urbano", valor=60, tem_nota_fiscal=False),
+                       despesa(categoria="transporte_urbano", valor=60, tem_nota_fiscal=False, fornecedor="G"))
+        self.assertNotEqual(a.motivo, "sem_nota_fiscal")
+        self.assertNotEqual(b.motivo, "sem_nota_fiscal")
+
+
 if __name__ == "__main__":
     unittest.main()
