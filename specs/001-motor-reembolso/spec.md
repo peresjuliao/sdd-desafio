@@ -1,6 +1,6 @@
 # Spec — Motor de Cálculo de Reembolso
 
-**Versão:** 1.0 · **Status:** aprovada para implementação · **Última alteração:** 2026-10-19
+**Versão:** 1.1 · **Status:** aprovada para implementação · **Última alteração:** 2026-10-19
 
 > Este arquivo descreve o QUÊ e o PORQUÊ. Nenhuma linha aqui cita linguagem,
 > biblioteca, classe, função ou estrutura de pasta. Solução mora no `plan.md`.
@@ -416,8 +416,8 @@ duas diárias na mesma data é quase sempre lançamento repetido.
 | d-014 | 60,00 | parcial | acima_do_limite_diario |
 
 Totais: solicitado 1 816,84 (soma aritmética de todos os valores, inclusive o
-−45,00 e o 33,33 arredondado); reembolsável 710,43; aprovados 3, parciais 5,
-recusados 6.
+−45,00 e o 33,33 arredondado); reembolsável 710,43; aprovados 3, parciais 4,
+recusados 7.
 
 ## 8. Ordem de aplicação das regras
 
