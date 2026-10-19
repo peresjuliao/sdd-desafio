@@ -60,5 +60,26 @@ class TestCompetencia(unittest.TestCase):
         self.assertEqual((a.motivo, b.motivo), ("fora_da_competencia", "fora_da_competencia"))
 
 
+class TestDuplicata(unittest.TestCase):
+    def test_rn_007_segunda_ocorrencia_e_duplicata(self):
+        a, b = avaliar(despesa(id="d-006", data="2026-07-09", fornecedor="Bistro Central", valor=54.90),
+                       despesa(id="d-007", data="2026-07-09", fornecedor="Bistro Central", valor=54.90))
+        self.assertEqual((a.status, a.reembolsavel), ("aprovado", 5490))
+        self.assertEqual((b.status, b.motivo, b.reembolsavel), ("recusado", "duplicata", 0))
+
+    def test_b_11_descricao_diferente_ainda_e_duplicata(self):
+        a, b = avaliar(despesa(descricao="Almoco", fornecedor="bistro central"),
+                       despesa(descricao="Jantar", fornecedor=" Bistro Central "))
+        self.assertEqual(b.motivo, "duplicata")
+
+    def test_b_12_tres_iguais_recusa_duas(self):
+        a, b, c = avaliar(despesa(), despesa(), despesa())
+        self.assertEqual([x.motivo for x in (a, b, c)], ["dentro_do_limite", "duplicata", "duplicata"])
+
+    def test_rn_007_data_diferente_nao_e_duplicata(self):
+        a, b = avaliar(despesa(data="2026-07-09"), despesa(data="2026-07-10"))
+        self.assertEqual(b.status, "aprovado")
+
+
 if __name__ == "__main__":
     unittest.main()
