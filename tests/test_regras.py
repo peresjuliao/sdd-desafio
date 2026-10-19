@@ -136,5 +136,45 @@ class TestCotaDiaria(unittest.TestCase):
         self.assertEqual((a.reembolsavel, b.reembolsavel), (3800, 2200))
 
 
+class TestViagem(unittest.TestCase):
+    hotel = dict(categoria="hospedagem", data="2026-07-14", valor=480, fornecedor="Hotel")
+
+    def test_rn_005_dia_seguinte_a_hospedagem_e_viagem(self):
+        h, cafe, depois = avaliar(despesa(**self.hotel),
+                                  despesa(data="2026-07-15", valor=80),
+                                  despesa(data="2026-07-16", valor=80))
+        self.assertEqual((cafe.reembolsavel, cafe.status), (8000, "aprovado"))
+        self.assertEqual((depois.reembolsavel, depois.status), (6000, "parcial"))
+
+    def test_rn_005_dia_anterior_a_hospedagem_nao_e_viagem(self):
+        antes, h = avaliar(despesa(data="2026-07-13", valor=80), despesa(**self.hotel))
+        self.assertEqual(antes.reembolsavel, 6000)
+
+    def test_rn_004_viagem_amplia_cota_em_50(self):
+        h, taxi = avaliar(despesa(**self.hotel), despesa(categoria="transporte_urbano", data="2026-07-14", valor=130))
+        self.assertEqual((h.reembolsavel, h.status), (37500, "parcial"))
+        self.assertEqual((taxi.reembolsavel, taxi.status), (12000, "parcial"))
+
+    def test_rn_004_viagem_nao_amplia_piso_de_nota(self):
+        h, taxi = avaliar(despesa(**self.hotel),
+                          despesa(categoria="transporte_urbano", data="2026-07-14", valor=100.01, tem_nota_fiscal=False))
+        self.assertEqual(taxi.motivo, "sem_nota_fiscal")
+
+    def test_rn_011_hospedagem_e_uma_diaria(self):
+        h, = avaliar(despesa(**self.hotel, descricao="Hotel Rio - 2 diarias"))
+        self.assertEqual(h.reembolsavel, 37500)
+
+    def test_b_10_hospedagem_recusada_ainda_marca_viagem(self):
+        h, almoco = avaliar(despesa(categoria="hospedagem", data="2026-07-22", valor=690, tem_nota_fiscal=False),
+                            despesa(data="2026-07-23", valor=90))
+        self.assertEqual(h.motivo, "sem_nota_fiscal")
+        self.assertEqual((almoco.reembolsavel, almoco.status), (9000, "aprovado"))
+
+    def test_rn_005_hospedagem_fora_da_competencia_nao_marca_viagem(self):
+        h, almoco = avaliar(despesa(categoria="hospedagem", data="2026-06-30", valor=100),
+                            despesa(data="2026-07-01", valor=90))
+        self.assertEqual(almoco.reembolsavel, 6000)
+
+
 if __name__ == "__main__":
     unittest.main()

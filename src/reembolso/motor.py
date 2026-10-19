@@ -1,5 +1,6 @@
 """Motor de cálculo: função pura, ordem de regras da spec seção 8."""
 from dataclasses import dataclass
+from datetime import timedelta
 
 from .entrada import Despesa, Pedido
 
@@ -42,9 +43,21 @@ def calcular(pedido: Pedido, politica: dict) -> Resultado:
     estado = {
         "vistos": set(),   # chaves de duplicata já avaliadas (RN-007)
         "saldo": {},       # (data, categoria) -> centavos que restam da cota (RN-001)
+        "viagem": _dias_em_viagem(pedido),
     }
     avaliacoes = [_avaliar(d, pedido, politica, estado) for d in pedido.despesas]
     return Resultado(politica["versao"], pedido, avaliacoes)
+
+
+def _dias_em_viagem(pedido: Pedido) -> set:
+    """RN-005: hospedagem válida (valor > 0, dentro do período) marca o dia D e D+1,
+    mesmo que o item venha a ser recusado por nota ou duplicata."""
+    dias = set()
+    for d in pedido.despesas:
+        if d.categoria == "hospedagem" and d.valor > 0 and pedido.inicio <= d.data <= pedido.fim:
+            dias.add(d.data)
+            dias.add(d.data + timedelta(days=1))
+    return dias
 
 
 def _chave_duplicata(d: Despesa):
@@ -73,12 +86,15 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avalia
     saldo = estado["saldo"].setdefault((d.data, d.categoria), limite)
     pago = min(d.valor, saldo)
     estado["saldo"][(d.data, d.categoria)] = saldo - pago
+    viagem = " (em viagem)" if d.data in estado["viagem"] else ""
+    detalhe = f"limite de {d.categoria} em {d.data}{viagem} e {reais(limite)}; restavam {reais(saldo)}"
     if pago == d.valor:
-        return Avaliacao(d, pago, "aprovado", "dentro_do_limite",
-                         f"limite de {d.categoria} em {d.data} e {reais(limite)}; restavam {reais(saldo)}")
-    return Avaliacao(d, pago, "parcial" if pago else "recusado", "acima_do_limite_diario",
-                     f"limite de {d.categoria} em {d.data} e {reais(limite)}; restavam {reais(saldo)}")
+        return Avaliacao(d, pago, "aprovado", "dentro_do_limite", detalhe)
+    return Avaliacao(d, pago, "parcial" if pago else "recusado", "acima_do_limite_diario", detalhe)
 
 
 def _limite(d: Despesa, politica: dict, estado: dict) -> int:
-    return politica["limites"][d.categoria]
+    base = politica["limites"][d.categoria]
+    if d.data in estado["viagem"]:                                           # RN-004
+        return base * (100 + politica["acrescimo_em_viagem_percentual"]) // 100
+    return base
