@@ -113,12 +113,12 @@
     `test_amb_022_piso_de_nota_sobre_valor_em_reais`, `test_b_23_moedas_diferentes_nao_sao_duplicata`
   - **Commit:** `f691717`
 
-- [ ] **T-014** — Pendência: reembolsável > 500,00 vira `pendente`; resumo
+- [x] **T-014** — Pendência: reembolsável > 500,00 vira `pendente`; resumo
   com `total_pendente` e `pendentes`.
   - **Atende:** RN-015, RN-012, AMB-025, B-24, B-25
   - **Aceite:** `test_rn_015_acima_de_500_fica_pendente`, `test_b_24_exatamente_500_aprovado`,
     `test_rn_012_pendente_fora_do_total_reembolsavel`
-  - **Commit:**
+  - **Commit:** `d898d9a`
 
 - [ ] **T-015** — CLI com `--politica` e `--cambio` opcionais; campos novos na
   saída; ponta a ponta E-02 e E-03; E-01 inalterado; README e CLAUDE.md.
