@@ -9,7 +9,7 @@
 > técnico (spec, plano, tasks, código, testes, absorção do envelope e o
 > rascunho deste relatório) foi feito pelo Claude Code numa única sessão
 > autônoma de cerca de 25 minutos (commits `03d7b37` 17:03 → `dee0090`
-> 17:17, mais o commit do template às 16:56), a partir de um briefing que eu
+> 17:17, mais o commit do template às 16:57), a partir de um briefing que eu
 > escrevi em outra sessão. Eu não revisei o diff em tempo real. Os erros
 > registrados na seção Discernimento foram cometidos pelo agente e pegos
 > **por verificação automatizada que o próprio agente rodou** (teste, execução
