@@ -23,5 +23,16 @@ class TestFundacao(unittest.TestCase):
         self.assertEqual(r.resumo["total_reembolsavel"], 0)
 
 
+class TestCategoria(unittest.TestCase):
+    def test_rn_008_categoria_fora_da_politica_recusada(self):
+        a, = avaliar(despesa(categoria="coworking", valor=89))
+        self.assertEqual((a.status, a.motivo, a.reembolsavel), ("recusado", "categoria_nao_coberta", 0))
+
+    def test_rn_010_categoria_maiuscula_e_normalizada(self):
+        a, = avaliar(despesa(categoria="ALIMENTACAO", valor=10))
+        self.assertEqual(a.status, "aprovado")
+        self.assertEqual(a.despesa.categoria, "alimentacao")
+
+
 if __name__ == "__main__":
     unittest.main()
