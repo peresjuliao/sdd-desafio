@@ -14,6 +14,7 @@ POLITICA_PADRAO = {
     "centros_custo": {},
     "nota_fiscal_obrigatoria_acima_de": 10000,
     "acrescimo_em_viagem_percentual": 50,
+    "pendencia_acima_de": 50000,   # RN-015
 }
 POLITICA_V3 = POLITICA_PADRAO  # nome usado pelos testes da fase 1
 
@@ -33,6 +34,7 @@ def carregar_politica(caminho) -> dict:
             "centros_custo": {cc: _tabela(t) for cc, t in dados.get("centros_custo", {}).items()},
             "nota_fiscal_obrigatoria_acima_de": centavos(dados.get("nota_fiscal_obrigatoria_acima_de", 100)),
             "acrescimo_em_viagem_percentual": int(dados.get("acrescimo_em_viagem_percentual", 50)),
+            "pendencia_acima_de": centavos(dados.get("pendencia_acima_de", 500)),
         }
     except (OSError, json.JSONDecodeError, KeyError, TypeError, AttributeError) as e:
         raise EntradaInvalida(f"politica invalida em {caminho}: {e!r}")

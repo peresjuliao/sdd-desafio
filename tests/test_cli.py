@@ -28,8 +28,8 @@ class TestCli(unittest.TestCase):
         self.assertEqual(item["status"], "parcial")
         self.assertEqual(item["motivo"], "acima_do_limite_diario")
         self.assertIn("60,00", item["detalhe"])
-        self.assertEqual(out["resumo"], {"total_solicitado": 72.5, "total_reembolsavel": 60.0,
-                                         "aprovados": 0, "parciais": 1, "recusados": 1 - 1})
+        self.assertEqual(out["resumo"], {"total_solicitado": 72.5, "total_reembolsavel": 60.0, "total_pendente": 0.0,
+                                         "aprovados": 0, "parciais": 1, "recusados": 0, "pendentes": 0})
 
     def test_cli_entrada_invalida_nao_escreve_saida(self):
         self._escreve({"colaborador": {"id": "c-1"}, "periodo": {"inicio": "2026-07-01"}, "despesas": []})

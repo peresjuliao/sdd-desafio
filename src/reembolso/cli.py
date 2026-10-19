@@ -23,5 +23,6 @@ def main(argv=None) -> int:
     escrever(resultado, args.output)   # só abre a saída depois do cálculo (DT-004)
     r = resultado.resumo
     print(f"{len(resultado.avaliacoes)} itens: {r['aprovados']} aprovados, {r['parciais']} parciais, "
-          f"{r['recusados']} recusados; reembolsavel R$ {r['total_reembolsavel'] / 100:.2f}")
+          f"{r['recusados']} recusados, {r['pendentes']} pendentes; reembolsavel R$ {r['total_reembolsavel'] / 100:.2f}"
+          f", pendente R$ {r['total_pendente'] / 100:.2f}")
     return 0

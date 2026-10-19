@@ -11,7 +11,7 @@ from .politica import limites_para
 class Avaliacao:
     despesa: Despesa
     reembolsavel: int   # centavos, em reais
-    status: str         # aprovado | parcial | recusado
+    status: str         # aprovado | parcial | recusado | pendente
     motivo: str
     detalhe: str
     valor_brl: int = None   # valor solicitado em reais; None se a conversão falhou (RN-014)
@@ -28,10 +28,12 @@ class Resultado:
     def resumo(self) -> dict:  # RN-012
         return {
             "total_solicitado": sum(a.valor_brl for a in self.avaliacoes if a.valor_brl is not None),
-            "total_reembolsavel": sum(a.reembolsavel for a in self.avaliacoes),
+            "total_reembolsavel": sum(a.reembolsavel for a in self.avaliacoes if a.status in ("aprovado", "parcial")),
+            "total_pendente": sum(a.reembolsavel for a in self.avaliacoes if a.status == "pendente"),
             "aprovados": sum(a.status == "aprovado" for a in self.avaliacoes),
             "parciais": sum(a.status == "parcial" for a in self.avaliacoes),
             "recusados": sum(a.status == "recusado" for a in self.avaliacoes),
+            "pendentes": sum(a.status == "pendente" for a in self.avaliacoes),
         }
 
 
@@ -106,8 +108,13 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avalia
     viagem = " (em viagem)" if d.data in estado["viagem"] else ""
     detalhe = f"limite de {d.categoria} em {d.data}{viagem} e {reais(limite)}; restavam {reais(saldo)}{conv}"
     if pago == valor:
-        return Avaliacao(d, pago, "aprovado", "dentro_do_limite", detalhe, valor, taxa)
-    return Avaliacao(d, pago, "parcial" if pago else "recusado", "acima_do_limite_diario", detalhe, valor, taxa)
+        status, motivo = "aprovado", "dentro_do_limite"
+    else:
+        status, motivo = ("parcial" if pago else "recusado"), "acima_do_limite_diario"
+    if pago > politica["pendencia_acima_de"]:                                # RN-015
+        status = "pendente"
+        detalhe += f"; {reais(pago)} passa de {reais(politica['pendencia_acima_de'])}, aguarda gestor"
+    return Avaliacao(d, pago, status, motivo, detalhe, valor, taxa)
 
 
 def _limite(d: Despesa, politica: dict, estado: dict) -> int:

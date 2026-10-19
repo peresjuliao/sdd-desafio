@@ -31,8 +31,8 @@ class TestExemploOficial(unittest.TestCase):
         obtido = {i["id"]: (i["valor_reembolsavel"], i["status"], i["motivo"]) for i in out["itens"]}
         self.assertEqual(obtido, E_01)
         self.assertEqual([i["id"] for i in out["itens"]], list(E_01))
-        self.assertEqual(out["resumo"], {"total_solicitado": 1816.84, "total_reembolsavel": 710.43,
-                                         "aprovados": 3, "parciais": 4, "recusados": 7})
+        self.assertEqual(out["resumo"], {"total_solicitado": 1816.84, "total_reembolsavel": 710.43, "total_pendente": 0.0,
+                                         "aprovados": 3, "parciais": 4, "recusados": 7, "pendentes": 0})
 
     def test_saida_e_deterministica(self):
         a = os.path.join(tempfile.mkdtemp(), "a.json"); b = os.path.join(tempfile.mkdtemp(), "b.json")
