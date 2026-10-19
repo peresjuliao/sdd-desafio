@@ -38,11 +38,11 @@
     `test_b_08_valor_zero_invalido`
   - **Commit:** `27d6315`
 
-- [ ] **T-005** — Competência fechada e inclusiva.
+- [x] **T-005** — Competência fechada e inclusiva.
   - **Atende:** RN-006, AMB-006, B-06, B-07
   - **Aceite:** `test_rn_006_fora_da_competencia_recusado`,
     `test_b_06_pontas_do_periodo_aceitas`, `test_b_07_dia_antes_do_inicio_recusado`
-  - **Commit:**
+  - **Commit:** `fcaa957`
 
 - [ ] **T-006** — Duplicata: segunda ocorrência recusada, não consome cota.
   - **Atende:** RN-007, AMB-007, B-11, B-12
