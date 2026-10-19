@@ -101,5 +101,40 @@ class TestNotaFiscal(unittest.TestCase):
         self.assertNotEqual(b.motivo, "sem_nota_fiscal")
 
 
+class TestCotaDiaria(unittest.TestCase):
+    def test_rn_001_dois_almocos_somam_na_cota_do_dia(self):
+        a, b = avaliar(despesa(valor=72.50), despesa(valor=38.00, fornecedor="G"))
+        self.assertEqual(a.reembolsavel + b.reembolsavel, 6000)
+        c, = avaliar(despesa(valor=54.90))
+        self.assertEqual((c.reembolsavel, c.status), (5490, "aprovado"))
+
+    def test_rn_002_excedente_e_cortado_e_segundo_item_zera(self):
+        a, b = avaliar(despesa(valor=72.50), despesa(valor=38.00, fornecedor="G"))
+        self.assertEqual((a.reembolsavel, a.status, a.motivo), (6000, "parcial", "acima_do_limite_diario"))
+        self.assertEqual((b.reembolsavel, b.status, b.motivo), (0, "recusado", "acima_do_limite_diario"))
+
+    def test_b_01_exatamente_no_limite_aprovado(self):
+        a, = avaliar(despesa(valor=60.00))
+        self.assertEqual((a.reembolsavel, a.status), (6000, "aprovado"))
+
+    def test_b_02_um_centavo_acima_e_parcial(self):
+        a, = avaliar(despesa(valor=60.01))
+        self.assertEqual((a.reembolsavel, a.status), (6000, "parcial"))
+
+    def test_b_05_item_sem_nota_nao_consome_cota(self):
+        a, b = avaliar(despesa(categoria="transporte_urbano", valor=100.01, tem_nota_fiscal=False),
+                       despesa(categoria="transporte_urbano", valor=50, fornecedor="G"))
+        self.assertEqual(a.motivo, "sem_nota_fiscal")
+        self.assertEqual((b.reembolsavel, b.status), (5000, "aprovado"))
+
+    def test_rn_001_categorias_tem_cotas_separadas_no_mesmo_dia(self):
+        a, b = avaliar(despesa(valor=60), despesa(categoria="transporte_urbano", valor=80))
+        self.assertEqual((a.status, b.status), ("aprovado", "aprovado"))
+
+    def test_amb_003_cota_e_consumida_na_ordem_da_entrada(self):
+        a, b = avaliar(despesa(valor=38.00), despesa(valor=72.50, fornecedor="G"))
+        self.assertEqual((a.reembolsavel, b.reembolsavel), (3800, 2200))
+
+
 if __name__ == "__main__":
     unittest.main()

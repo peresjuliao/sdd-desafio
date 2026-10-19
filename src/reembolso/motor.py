@@ -39,7 +39,10 @@ def _recusa(d, motivo, detalhe):
 
 
 def calcular(pedido: Pedido, politica: dict) -> Resultado:
-    estado = {"vistos": set()}   # chaves de duplicata já avaliadas (RN-007)
+    estado = {
+        "vistos": set(),   # chaves de duplicata já avaliadas (RN-007)
+        "saldo": {},       # (data, categoria) -> centavos que restam da cota (RN-001)
+    }
     avaliacoes = [_avaliar(d, pedido, politica, estado) for d in pedido.despesas]
     return Resultado(politica["versao"], pedido, avaliacoes)
 
@@ -65,4 +68,17 @@ def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avalia
     piso = politica["nota_fiscal_obrigatoria_acima_de"]                      # RN-003
     if d.valor > piso and not d.tem_nota_fiscal:
         return _recusa(d, "sem_nota_fiscal", f"valor {reais(d.valor)} acima de {reais(piso)} exige nota fiscal")
-    return Avaliacao(d, d.valor, "aprovado", "dentro_do_limite", "")
+    # RN-001/RN-002: cota do par (data, categoria), consumida em ordem de entrada
+    limite = _limite(d, politica, estado)
+    saldo = estado["saldo"].setdefault((d.data, d.categoria), limite)
+    pago = min(d.valor, saldo)
+    estado["saldo"][(d.data, d.categoria)] = saldo - pago
+    if pago == d.valor:
+        return Avaliacao(d, pago, "aprovado", "dentro_do_limite",
+                         f"limite de {d.categoria} em {d.data} e {reais(limite)}; restavam {reais(saldo)}")
+    return Avaliacao(d, pago, "parcial" if pago else "recusado", "acima_do_limite_diario",
+                     f"limite de {d.categoria} em {d.data} e {reais(limite)}; restavam {reais(saldo)}")
+
+
+def _limite(d: Despesa, politica: dict, estado: dict) -> int:
+    return politica["limites"][d.categoria]
