@@ -44,12 +44,12 @@
     `test_b_06_pontas_do_periodo_aceitas`, `test_b_07_dia_antes_do_inicio_recusado`
   - **Commit:** `fcaa957`
 
-- [ ] **T-006** — Duplicata: segunda ocorrência recusada, não consome cota.
+- [x] **T-006** — Duplicata: segunda ocorrência recusada, não consome cota.
   - **Atende:** RN-007, AMB-007, B-11, B-12
   - **Aceite:** `test_rn_007_segunda_ocorrencia_e_duplicata`,
     `test_b_11_descricao_diferente_ainda_e_duplicata`,
     `test_b_12_tres_iguais_recusa_duas`
-  - **Commit:**
+  - **Commit:** `7fb28ee`
 
 - [ ] **T-007** — Nota fiscal obrigatória acima de 100,00 (estrito, sobre o
   valor do item).
