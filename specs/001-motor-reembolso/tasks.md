@@ -9,13 +9,13 @@
 
 ## Fase 1 — Fundação
 
-- [ ] **T-001** — Leitura e validação da entrada: JSON → `Pedido` com datas e
+- [x] **T-001** — Leitura e validação da entrada: JSON → `Pedido` com datas e
   centavos; campos obrigatórios; defaults de `tem_nota_fiscal` e `fornecedor`.
   - **Atende:** spec 4.1, RN-010 (arredondamento), B-09, B-14, B-15
   - **Aceite:** `test_rn_010_valor_arredonda_meio_para_cima`,
     `test_b_09_meio_centavo_arredonda_para_cima`, `test_b_14_nota_ausente_e_false`,
     `test_b_15_campo_obrigatorio_ausente_levanta_erro`
-  - **Commit:**
+  - **Commit:** `cc9d421`
 
 - [ ] **T-002** — Política v3 como dados e esqueleto do motor: `calcular`
   devolve um item por despesa, na mesma ordem, com `aprovado`/`dentro_do_limite`
