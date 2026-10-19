@@ -63,17 +63,17 @@
   - **Atende:** RN-001, RN-002, AMB-001, AMB-002, AMB-003, AMB-015, B-01, B-02, B-05
   - **Aceite:** `test_rn_001_dois_almocos_somam_na_cota_do_dia`,
     `test_rn_002_excedente_e_cortado_e_segundo_item_zera`,
-    `test_b_05_item_sem_nota_nao_consome_cota`, `test_rn_011_hospedagem_e_uma_diaria`
+    `test_b_05_item_sem_nota_nao_consome_cota`
   - **Commit:** `9be2dc2`
 
-- [ ] **T-009** — Dias em viagem por hospedagem (D e D+1) e ampliação de 50%
+- [x] **T-009** — Dias em viagem por hospedagem (D e D+1) e ampliação de 50%
   das cotas; piso de nota inalterado.
   - **Atende:** RN-004, RN-005, RN-011, AMB-005, AMB-013, AMB-014, B-10
   - **Aceite:** `test_rn_005_dia_seguinte_a_hospedagem_e_viagem`,
     `test_rn_004_viagem_amplia_cota_em_50`,
     `test_rn_004_viagem_nao_amplia_piso_de_nota`,
     `test_b_10_hospedagem_recusada_ainda_marca_viagem`
-  - **Commit:**
+  - **Commit:** `76e2de2`
 
 ## Fase 3 — Saída e CLI
 
@@ -113,7 +113,7 @@
 | RN-008 | T-003 | `test_rn_008_categoria_fora_da_politica_recusada` |
 | RN-009 | T-004 | `test_rn_009_estorno_negativo_recusado_e_nao_abate` |
 | RN-010 | T-001, T-003 | `test_rn_010_valor_arredonda_meio_para_cima`, `test_rn_010_categoria_maiuscula_e_normalizada` |
-| RN-011 | T-008 | `test_rn_011_hospedagem_e_uma_diaria` |
+| RN-011 | T-009 | `test_rn_011_hospedagem_e_uma_diaria` |
 | RN-012 | T-002 | `test_rn_012_resumo_soma_e_conta` |
 | AMB-001..003, 015 | T-008 | (via RN-001/002/011) |
 | AMB-004, 012 | T-007 | (via RN-003) |
