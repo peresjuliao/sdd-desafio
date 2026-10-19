@@ -34,5 +34,17 @@ class TestCategoria(unittest.TestCase):
         self.assertEqual(a.despesa.categoria, "alimentacao")
 
 
+class TestValor(unittest.TestCase):
+    def test_rn_009_estorno_negativo_recusado_e_nao_abate(self):
+        corrida, estorno = avaliar(despesa(categoria="transporte_urbano", valor=30),
+                                   despesa(categoria="transporte_urbano", valor=-45))
+        self.assertEqual((estorno.status, estorno.motivo, estorno.reembolsavel), ("recusado", "valor_invalido", 0))
+        self.assertEqual(corrida.reembolsavel, 3000)
+
+    def test_b_08_valor_zero_invalido(self):
+        a, = avaliar(despesa(valor=0))
+        self.assertEqual(a.motivo, "valor_invalido")
+
+
 if __name__ == "__main__":
     unittest.main()
