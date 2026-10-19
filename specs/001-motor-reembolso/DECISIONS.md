@@ -5,6 +5,31 @@
 
 ---
 
+## D-004 — `valor_solicitado` preenchido mesmo em item recusado antes da conversão · 2026-10-19
+
+**Gatilho:** erro descoberto na implementação (T-013). Com a conversão como
+passo 4 da ordem de regras, itens recusados nos passos 2 e 3 (`d-009`
+negativo, `d-008` fora da competência) ficavam sem valor em reais e o
+`total_solicitado` do E-01 mudava de 1 816,84 para 1 820,84; o teste E-01
+quebrou.
+
+**O que mudou na spec:** RN-014 ganha a frase "`valor_solicitado` e
+`taxa_cambio` são preenchidos sempre que a taxa existe, inclusive em item
+recusado por valor inválido ou competência; só ficam nulos quando não há taxa".
+A ordem dos motivos (seção 8) não muda.
+
+**Por quê:** o total solicitado precisa continuar sendo "o que o colaborador
+pediu, em reais"; um item recusado continua tendo sido pedido.
+
+**O que isso invalidou:** nada além da leitura literal da ordem da seção 8
+como ordem de cálculo; ela é ordem de precedência dos motivos.
+
+**Tasks afetadas:** T-013.
+
+**Custo:** 2 arquivos (spec e motor), minutos.
+
+---
+
 ## D-003 — Política v4: limites por centro de custo, moeda estrangeira, pendência · 2026-10-19
 
 **Gatilho:** envelope lacrado do Dia 2 (`exemplos/envelope/00-ENVELOPE-LACRADO.md`).

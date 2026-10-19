@@ -279,7 +279,10 @@ data, usa-se a taxa da data publicada mais recente anterior a ela; se não
 houver nenhuma taxa até aquela data, ou a moeda não constar da tabela, o item
 é `recusado` com `cambio_indisponivel` e `valor_solicitado` nulo. O resultado
 da conversão é arredondado a centavos (meio para cima) uma única vez. Todas as
-regras seguintes (nota fiscal, cotas, pendência) usam o valor em reais. O
+regras seguintes (nota fiscal, cotas, pendência) usam o valor em reais.
+`valor_solicitado` e `taxa_cambio` são preenchidos sempre que a taxa existe,
+inclusive em item recusado por valor inválido ou competência; só ficam nulos
+quando não há taxa. O
 valor inválido (RN-009) e a duplicata (RN-007) olham o valor original e a
 moeda.
 **Origem:** v4 item B · AMB-019, AMB-020, AMB-021, AMB-022, AMB-023
