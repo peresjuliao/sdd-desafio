@@ -95,14 +95,14 @@
 
 ## Fase 4 — Envelope (Dia 2, spec 2.0, D-003)
 
-- [ ] **T-012** — Política lida de arquivo e tabela de limites por centro de
+- [x] **T-012** — Política lida de arquivo e tabela de limites por centro de
   custo (sobreposição categoria a categoria; limite zero = não coberta);
   política padrão embutida quando não há arquivo.
   - **Atende:** RN-013, RN-008 (limite zero), AMB-016, AMB-017, AMB-018, AMB-024, AMB-027, AMB-028, B-16, B-17, B-18
   - **Aceite:** `test_rn_013_cc_sem_entrada_usa_padrao`, `test_rn_013_cc_sobrepoe_categoria_a_categoria`,
     `test_rn_013_limite_zero_e_categoria_nao_coberta`, `test_b_18_hospedagem_limite_zero_ainda_marca_viagem`,
     `test_rn_013_representacao_so_onde_listada`
-  - **Commit:**
+  - **Commit:** `f24a4ae`
 
 - [ ] **T-013** — Campo `moeda` e conversão pela taxa da data (ou a anterior
   mais recente); `cambio_indisponivel`; piso de nota e cotas sobre o valor em
