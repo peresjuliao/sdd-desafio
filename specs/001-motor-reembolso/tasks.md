@@ -17,12 +17,12 @@
     `test_b_15_campo_obrigatorio_ausente_levanta_erro`
   - **Commit:** `cc9d421`
 
-- [ ] **T-002** — Política v3 como dados e esqueleto do motor: `calcular`
+- [x] **T-002** — Política v3 como dados e esqueleto do motor: `calcular`
   devolve um item por despesa, na mesma ordem, com `aprovado`/`dentro_do_limite`
   quando nada recusa; resumo.
   - **Atende:** RN-012, B-13, spec 4.2 (estrutura)
   - **Aceite:** `test_rn_012_resumo_soma_e_conta`, `test_b_13_sem_despesas`
-  - **Commit:**
+  - **Commit:** `79a4eaf`
 
 ## Fase 2 — Regras de negócio
 
