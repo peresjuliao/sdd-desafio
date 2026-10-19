@@ -16,8 +16,9 @@ class Despesa:
     categoria: str          # normalizada (RN-010)
     descricao: str
     fornecedor: str         # original, para a saída
-    valor: int              # centavos (RN-010)
+    valor: int              # centavos, na moeda do item (RN-010)
     tem_nota_fiscal: bool
+    moeda: str = "BRL"      # ISO 4217, normalizada em maiúsculas (RN-014)
 
     @property
     def fornecedor_norm(self) -> str:
@@ -80,6 +81,7 @@ def montar_pedido(dados) -> Pedido:
             fornecedor=str(d.get("fornecedor", "")),
             valor=centavos(_obrigatorio(d, "valor", ctx)),
             tem_nota_fiscal=bool(d.get("tem_nota_fiscal", False)),
+            moeda=str(d.get("moeda") or "BRL").strip().upper(),
         ))
     return Pedido(colaborador=dict(colaborador), periodo=dict(periodo),
                   inicio=inicio, fim=fim, despesas=despesas)

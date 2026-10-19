@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 from datetime import timedelta
 
+from .cambio import SEM_CAMBIO, converter, taxa_para
 from .entrada import Despesa, Pedido
 from .politica import limites_para
 
@@ -9,10 +10,12 @@ from .politica import limites_para
 @dataclass(frozen=True)
 class Avaliacao:
     despesa: Despesa
-    reembolsavel: int   # centavos
+    reembolsavel: int   # centavos, em reais
     status: str         # aprovado | parcial | recusado
     motivo: str
     detalhe: str
+    valor_brl: int = None   # valor solicitado em reais; None se a conversão falhou (RN-014)
+    taxa: object = None     # Decimal usada na conversão; None se falhou
 
 
 @dataclass(frozen=True)
@@ -24,7 +27,7 @@ class Resultado:
     @property
     def resumo(self) -> dict:  # RN-012
         return {
-            "total_solicitado": sum(a.despesa.valor for a in self.avaliacoes),
+            "total_solicitado": sum(a.valor_brl for a in self.avaliacoes if a.valor_brl is not None),
             "total_reembolsavel": sum(a.reembolsavel for a in self.avaliacoes),
             "aprovados": sum(a.status == "aprovado" for a in self.avaliacoes),
             "parciais": sum(a.status == "parcial" for a in self.avaliacoes),
@@ -36,12 +39,13 @@ def reais(c: int) -> str:
     return f"R$ {c // 100},{c % 100:02d}" if c >= 0 else f"-R$ {-c // 100},{-c % 100:02d}"
 
 
-def _recusa(d, motivo, detalhe):
-    return Avaliacao(d, 0, "recusado", motivo, detalhe)
+def _recusa(d, motivo, detalhe, valor_brl=None, taxa=None):
+    return Avaliacao(d, 0, "recusado", motivo, detalhe, valor_brl, taxa)
 
 
-def calcular(pedido: Pedido, politica: dict) -> Resultado:
+def calcular(pedido: Pedido, politica: dict, cambio: dict = SEM_CAMBIO) -> Resultado:
     estado = {
+        "cambio": cambio,
         "vistos": set(),   # chaves de duplicata já avaliadas (RN-007)
         "saldo": {},       # (data, categoria) -> centavos que restam da cota (RN-001)
         "viagem": _dias_em_viagem(pedido),
@@ -63,37 +67,47 @@ def _dias_em_viagem(pedido: Pedido) -> set:
 
 
 def _chave_duplicata(d: Despesa):
-    return (d.data, d.categoria, d.fornecedor_norm, d.valor)
+    return (d.data, d.categoria, d.fornecedor_norm, d.moeda, d.valor)   # AMB-023: moeda e valor original
 
 
 def _avaliar(d: Despesa, pedido: Pedido, politica: dict, estado: dict) -> Avaliacao:
+    # Conversão (RN-014) é calculada antes de tudo para que valor_solicitado exista
+    # sempre que houver taxa, mesmo em item recusado; o motivo segue a ordem da seção 8.
+    taxa = taxa_para(estado["cambio"], d.moeda, d.data)
+    valor = converter(d.valor, taxa) if taxa is not None else None   # em reais
     # ordem da spec seção 8: a primeira regra que recusa vence
     if d.valor <= 0:                                                         # RN-009
-        return _recusa(d, "valor_invalido", f"valor {reais(d.valor)} nao e uma despesa")
+        return _recusa(d, "valor_invalido", f"valor {d.valor / 100:.2f} {d.moeda} nao e uma despesa", valor, taxa)
     if not (pedido.inicio <= d.data <= pedido.fim):                          # RN-006
         return _recusa(d, "fora_da_competencia",
-                       f"data {d.data} fora do periodo {pedido.inicio} a {pedido.fim}")
+                       f"data {d.data} fora do periodo {pedido.inicio} a {pedido.fim}", valor, taxa)
+    if taxa is None:                                                         # RN-014
+        return _recusa(d, "cambio_indisponivel", f"sem taxa de {d.moeda} publicada ate {d.data}")
+    conv = f" ({d.valor / 100:.2f} {d.moeda} x {taxa} = {reais(valor)})" if d.moeda != "BRL" else ""
     if estado["limites"].get(d.categoria, 0) <= 0:                           # RN-008, RN-013
         return _recusa(d, "categoria_nao_coberta",
-                       f"categoria '{d.categoria}' nao e reembolsavel para {pedido.colaborador.get('centro_custo') or 'a politica padrao'}")
+                       f"categoria '{d.categoria}' nao e reembolsavel para {pedido.colaborador.get('centro_custo') or 'a politica padrao'}",
+                       valor, taxa)
     chave = _chave_duplicata(d)                                              # RN-007
     if chave in estado["vistos"]:
         return _recusa(d, "duplicata",
-                       f"repete item anterior de {d.data}, {d.categoria}, {d.fornecedor}, {reais(d.valor)}")
+                       f"repete item anterior de {d.data}, {d.categoria}, {d.fornecedor}, {d.valor / 100:.2f} {d.moeda}",
+                       valor, taxa)
     estado["vistos"].add(chave)
     piso = politica["nota_fiscal_obrigatoria_acima_de"]                      # RN-003
-    if d.valor > piso and not d.tem_nota_fiscal:
-        return _recusa(d, "sem_nota_fiscal", f"valor {reais(d.valor)} acima de {reais(piso)} exige nota fiscal")
+    if valor > piso and not d.tem_nota_fiscal:
+        return _recusa(d, "sem_nota_fiscal", f"valor {reais(valor)}{conv} acima de {reais(piso)} exige nota fiscal",
+                       valor, taxa)
     # RN-001/RN-002: cota do par (data, categoria), consumida em ordem de entrada
     limite = _limite(d, politica, estado)
     saldo = estado["saldo"].setdefault((d.data, d.categoria), limite)
-    pago = min(d.valor, saldo)
+    pago = min(valor, saldo)
     estado["saldo"][(d.data, d.categoria)] = saldo - pago
     viagem = " (em viagem)" if d.data in estado["viagem"] else ""
-    detalhe = f"limite de {d.categoria} em {d.data}{viagem} e {reais(limite)}; restavam {reais(saldo)}"
-    if pago == d.valor:
-        return Avaliacao(d, pago, "aprovado", "dentro_do_limite", detalhe)
-    return Avaliacao(d, pago, "parcial" if pago else "recusado", "acima_do_limite_diario", detalhe)
+    detalhe = f"limite de {d.categoria} em {d.data}{viagem} e {reais(limite)}; restavam {reais(saldo)}{conv}"
+    if pago == valor:
+        return Avaliacao(d, pago, "aprovado", "dentro_do_limite", detalhe, valor, taxa)
+    return Avaliacao(d, pago, "parcial" if pago else "recusado", "acima_do_limite_diario", detalhe, valor, taxa)
 
 
 def _limite(d: Despesa, politica: dict, estado: dict) -> int:
