@@ -39,7 +39,7 @@ class TestPoliticaV4(unittest.TestCase):
         h, almoco = avaliar("CC-ENG-PLATAFORMA", despesa(categoria="hospedagem", valor=200),
                             despesa(valor=100, fornecedor="G"))
         self.assertEqual(h.motivo, "categoria_nao_coberta")
-        self.assertEqual(almoco.reembolsavel, 7500 * 150 // 100)  # 75 * 1,5 = 112,50 → paga 100
+        self.assertEqual((almoco.reembolsavel, almoco.status), (10000, "aprovado"))  # cota 75 * 1,5 = 112,50 cobre os 100
 
     def test_rn_013_representacao_so_onde_listada(self):
         a, = avaliar("CC-COMERCIAL", despesa(categoria="representacao", valor=340))
