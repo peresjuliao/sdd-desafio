@@ -1,6 +1,6 @@
  ▐▛███▛█   Claude Code v2.1.300
 ▝▜██████▀  Fable 5.1 · Claude Max
- ▝▝   ▝▝   ~/Developer/workspace/app-radarpj-radarpjbffcanal
+ ▝▝   ▝▝   ~/Developer/workspace/<outro-projeto>
 
 
 ❯ Task (from the session that started this one):                                
@@ -21,7 +21,7 @@
   às 18h (amanhã), link do fork pelo formulário "Conclusão Fluência em IA"      
   (fixado no grupo Teams "Daily - Formação Anthropic Academy").                 
                                                                                 
-  Este trabalho NÃO é no repositório radarpj. Primeiro passo: confirmar com o   
+  Este trabalho NÃO é no repositório de outro projeto. Primeiro passo: confirmar com o   
   usuário a pasta e o usuário GitHub, depois fazer o fork público (gh repo fork 
   Sassine/sdd-desafio --clone) em ~/Developer/workspace/sdd-desafio (ou onde    
   ele preferir) e trabalhar lá. Antes de qualquer coisa, ler inteiro            
@@ -350,7 +350,7 @@
 ⏺ Atenção: num terminal comum o /export não existe, ele só funciona dentro de
   uma sessão do claude. Para exportar esta conversa pelo terminal:
 
-  cd ~/Developer/workspace/app-radarpj-radarpjbffcanal && claude --resume
+  cd ~/Developer/workspace/<outro-projeto> && claude --resume
   edf9e868-fbcc-4a06-a09e-090d8d152425
 
   Depois que a sessão abrir, digite /export e dê Enter. Ele pergunta o nome do
@@ -359,7 +359,7 @@
   ~/Developer/workspace/sdd-desafio/docs/sessions/01-spec-codig
   o-envelope.md
 
-  A pasta precisa ser a do radarpj porque foi nela que esta sessão rodou, não a
+  A pasta precisa ser a do outro projeto porque foi nela que esta sessão rodou, não a
   do sdd-desafio. Quando o arquivo estiver lá, me avise que eu commito e dou
   push.
 
@@ -379,9 +379,9 @@
   Pode escolher "Keep xhigh" ou "high", tanto faz para o export.
 
   Para exportar pelo terminal, o comando continua o mesmo, porque o transcript
-  desta conversa ficou gravado sob a pasta do radarpj:
+  desta conversa ficou gravado sob a pasta do outro projeto:
 
-  cd ~/Developer/workspace/app-radarpj-radarpjbffcanal && claude --resume
+  cd ~/Developer/workspace/<outro-projeto> && claude --resume
   edf9e868-fbcc-4a06-a09e-090d8d152425
 
   Dentro da sessão, /export e o caminho

@@ -18,7 +18,7 @@ e agora?
 
 ### **Claude** · 09:57:54 UTC
 
-O export funcionou, mas caiu na pasta do radarpj. Vou mover para o lugar certo, limpar o caminho da sua home, commitar e dar push.
+O export funcionou, mas caiu na pasta do outro projeto. Vou mover para o lugar certo, limpar o caminho da sua home, commitar e dar push.
 
 - ⚙ `mcp__ccd_turn__update_plan` — 
 
@@ -117,7 +117,7 @@ Escolha **2, "Save to file"** e digite o nome:
 02-revisao-e-entrega.md
 ```
 
-Ele vai salvar na pasta do radarpj de novo (é onde aquele terminal está). Não tem problema: me avise que eu movo para `docs/sessions/` do desafio, omito home e e-mail, commito e dou push.
+Ele vai salvar na pasta do outro projeto de novo (é onde aquele terminal está). Não tem problema: me avise que eu movo para `docs/sessions/` do desafio, omito home e e-mail, commito e dou push.
 
 ### **Usuário** · 10:02:35 UTC
 
