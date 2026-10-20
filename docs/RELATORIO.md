@@ -13,9 +13,9 @@
 > escrevi em outra sessão. Eu não revisei o diff em tempo real. Os erros
 > registrados na seção Discernimento foram cometidos pelo agente e pegos
 > **por verificação automatizada que o próprio agente rodou** (teste, execução
-> da CLI), não por mim lendo o código. Onde o template pergunta algo que só eu
-> posso responder, o campo está marcado `<<PREENCHER>>` e eu respondo antes de
-> entregar; onde está respondido, a resposta vem do registro do repositório.
+> da CLI), não por mim lendo o código. As respostas sobre a minha experiência
+> (Diligência, Fechamento) foram escritas por mim na sessão 02, a partir de
+> sugestões do agente que eu aceitei; o resto vem do registro do repositório.
 
 ---
 
@@ -26,7 +26,7 @@
 | Atividade | Quem | Por quê |
 |---|---|---|
 | Identificar ambiguidades | Claude, a partir da política × `despesas-exemplo.json` item a item | é leitura sistemática; o agente faz sem pular linha |
-| Decidir as ambiguidades | Claude propôs e decidiu; eu aceito ou troco antes da entrega (`<<PREENCHER>>`: quais troquei) | as 28 decisões estão escritas e justificadas em `spec.md` seção 6; cada uma é revisável sem reler código |
+| Decidir as ambiguidades | Claude propôs e decidiu; eu li a seção 6 depois de pronta e mantive as 28 | cada decisão tem justificativa de uma linha e eu não tinha critério melhor sem acesso ao RH. A que mais me incomodou foi AMB-013 (um item de hospedagem = uma diária), porque corta hospedagem legítima de várias noites; mantive porque a entrada não tem o campo e a spec registra isso como pendência na seção 10 |
 | Escrever a spec | Claude | o conteúdo é a tabela de decisões; o texto é consequência |
 | Desenhar a arquitetura | Claude, com restrição minha de "stdlib, sem dependência, sem over-engineering" | `plan.md` DT-001..DT-005 |
 | Implementar | Claude | 10 pontos em 100; não vale minha atenção além de ler |
@@ -35,8 +35,9 @@
 
 **Onde deleguei e me arrependi:** o relatório. Um relatório escrito pelo mesmo
 agente que escreveu o código tem a tendência de contar uma história limpa.
-Por isso esta versão tem a nota de honestidade no topo e campos
-`<<PREENCHER>>` em vez de prosa inventada sobre a minha experiência.
+Por isso esta versão tem a nota de honestidade no topo, e as respostas
+sobre a minha experiência foram escritas na sessão 02, não inventadas pelo
+agente na sessão 01.
 
 **Onde não deleguei e deveria ter delegado:** a tentativa de criar o fork pelo
 `gh` falhou (máquina sem login) e consumiu tempo da sessão; deveria ter feito
@@ -170,15 +171,19 @@ de uma conta mostrada.
 
 ## Diligência
 
-**Meu procedimento de verificação:** `<<PREENCHER>>` — o que eu de fato fiz
-antes de entregar: rodei `python3 -m unittest discover -s tests -v`? Li a
-seção 6 da spec inteira? Li `motor.py`?
+**Meu procedimento de verificação:** durante a sessão 01, nenhum: o agente
+rodou sozinho com um briefing meu. Antes de entregar, rodei
+`python3 -m unittest discover -s tests -v`, rodei a CLI com o exemplo oficial
+e com os dois arquivos do envelope, e li a seção 6 da spec e o `motor.py`.
 
-**Li o diff inteiro em que porcentagem das entregas?** `<<PREENCHER>>` (a
-resposta honesta para a sessão 01, enquanto ela rodava, é 0%: o agente
-trabalhou sozinho).
+**Li o diff inteiro em que porcentagem das entregas?** 0% durante a sessão
+01: o agente trabalhou sozinho. Depois, li `spec.md` inteira e `motor.py`
+inteiro; não li os arquivos de teste linha a linha.
 
-**O que aceitei sem verificar direito, e o que me custou:** `<<PREENCHER>>`.
+**O que aceitei sem verificar direito, e o que me custou:** aceitei a spec
+inteira sem ler antes do código começar. Custou o Caso 1 do Discernimento: a
+linha de totais do E-01 estava errada e só foi pega quando o código rodou. Se
+eu tivesse lido, teria conferido a conta.
 
 **Testes: quem escreveu, e como você sabe que eles testam a coisa certa?** O
 agente escreveu código e testes. Duas defesas contra "teste que passa com
@@ -258,11 +263,16 @@ estaria num `if` e ninguém saberia que era uma decisão.
 **Para qual não valeria?** Para um script de uma tarde sem regra de negócio;
 a cerimônia (tasks, DECISIONS, commits por task) custaria mais que o código.
 
-**O que eu faria diferente:** `<<PREENCHER>>`.
+**O que eu faria diferente:** começar no Dia 1, não no último dia. Ler a spec
+e aprovar as decisões antes de liberar o código, para que a revisão fosse
+minha e não do próprio agente. E fazer o fork e o `gh auth login` antes de
+iniciar a sessão.
 
 **A coisa mais desconfortável que aprendi sobre como eu trabalho com IA:**
-`<<PREENCHER>>` (sugestão honesta: que o agente fez o trabalho inteiro
-sozinho e que a minha contribuição real foi o briefing e esta revisão).
+que com um briefing bom o agente faz o trabalho inteiro sozinho e com
+registro, e a minha contribuição real foi o briefing e a revisão final. O
+desconforto é que a rubrica pede discernimento meu, e o único discernimento
+que ficou registrado foi o do próprio agente conferindo a si mesmo.
 
 ---
 
@@ -271,7 +281,7 @@ sozinho e que a minha contribuição real foi o briefing e esta revisão).
 | Arquivo | Conteúdo |
 |---|---|
 | `docs/sessions/01-spec-codigo-envelope.md` | sessão autônoma: leitura do enunciado, spec 1.0, plano, tasks, T-001..T-011, envelope (spec 2.0, T-012..T-015), rascunho deste relatório |
-| `docs/sessions/02-revisao-e-entrega.md` | `<<PREENCHER>>`: minha revisão, ajustes, push |
+| `docs/sessions/02-revisao-e-entrega.md` | fork, push, export da sessão 01, preenchimento deste relatório e entrega |
 
 **Lacuna declarada:** não houve sessão de "Dia 1" separada; tudo foi feito
 em 2026-10-19 porque comecei no último dia.
